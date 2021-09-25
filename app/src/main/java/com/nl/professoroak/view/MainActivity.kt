@@ -9,12 +9,12 @@ import com.nl.professoroak.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val navHostFragment by lazy {
-        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-    }
+//    private val navHostFragment by lazy {
+//        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.navHostFragment
     }
 }

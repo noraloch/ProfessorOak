@@ -6,23 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"
+        app:menu="@menu/appbar_menu"
+        app:title="@string/app_name" />
+
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
+        android:name="com.nl.professoroak.view.CardsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/og_btn" />
-
-    <Button
-        android:id="@+id/og_btn"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Show OG 151"
-        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
