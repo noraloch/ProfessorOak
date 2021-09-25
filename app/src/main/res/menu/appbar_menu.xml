@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        android:contentDescription="@string/content_description_search"
+        android:enabled="true" />
+
+    <item
+        android:id="@+id/og_only"
+        android:title="@string/original_151_only"
+        android:contentDescription="@string/content_description_more"
+        android:enabled="true" />
+
+</menu>

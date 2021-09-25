@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Professor Oak</string>
+    <string name="add_to_collection">Add to Collection</string>
+    <string name="view_og_151">View OG 151</string>
+    <string name="go">GO</string>
+    <string name="og">OG</string>
+    <string name="original_151_only">ORIGINAL 151</string>
+    <string name="search">Search</string>
+    <string name="content_description_search">"pokemons search bar "</string>
+    <string name="content_description_more">show the original 151 only</string>
 </resources>

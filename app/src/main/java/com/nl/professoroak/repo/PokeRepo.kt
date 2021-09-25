@@ -10,16 +10,16 @@ object PokeRepo {
     private const val TAG = "POKE-REPO"
     private val pokeService by lazy { RetrofitInstance.pokeService }
 
-    fun getPokeCardsState(queries: Queries) = flow {
+    fun getPokeCardsState(queries: Queries?) = flow {
         emit(ApiState.Loading)
 
-        val state = pokeService.getPokeCards(queries.asQueryMap).getApiState()
+        val state = pokeService.getPokeCards(queries?.asQueryMap).getApiState()
         emit(state)
     }
 
-    private fun <T> Response<List<T>>.getApiState(): ApiState<List<T>> {
+    private fun <T>  Response<T>.getApiState(): ApiState<T> {
         return if (isSuccessful) {
-            if (body().isNullOrEmpty()) ApiState.EndOfPage
+            if (body()== null) ApiState.EndOfPage
             else ApiState.Success(body()!!)
         } else ApiState.Failure("Error fetching data.")
     }
