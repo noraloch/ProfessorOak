@@ -38,7 +38,7 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokeViewModel.getImages(Queries("[1 TO 151]","name:char*"))
+        pokeViewModel.getImages(Queries(null,"name:pic*"))
         setupObservers()
     }
 

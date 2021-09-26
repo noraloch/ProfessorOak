@@ -22,13 +22,25 @@
             android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:text="@string/add_to_collection"
+            android:layout_gravity="bottom|start"
+            android:text="@string/add"
             android:textSize="18sp"
             android:textColor="@color/white_50"
-            android:contentDescription="@string/add_to_collection" />
+            android:contentDescription="@string/add_to_collection"
+            tools:ignore="RtlHardcoded" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/my_collection_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:text="@string/my_collection"
+            android:textSize="18sp"
+            android:textColor="@color/white_50"
+            android:contentDescription="@string/view_collection" />
 
 
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
