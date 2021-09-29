@@ -24,7 +24,7 @@ class PokeViewModel() : ViewModel() {
 
 
     fun getImages(queries: Queries?) {
-        Log.d(TAG, "getImages queries: $queries")
+//        Log.d(TAG, "getImages queries: $queries")
         viewModelScope.launch {
             PokeRepo.getPokeCardsState(queries).collect { pokeCardsState ->
                 _pokeCardsState.postValue(pokeCardsState)

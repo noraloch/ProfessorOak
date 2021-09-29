@@ -3,18 +3,15 @@ package com.nl.professoroak.view
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nl.professoroak.NavGraphDirections
 import com.nl.professoroak.R
+import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.ActivityMainBinding
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.viewmodel.PokeViewModel
@@ -27,6 +24,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
     private val pokeViewModel: PokeViewModel by viewModels()
+    private lateinit var searchView: SearchView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,23 +52,20 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 else -> false
             }
         }
-
-        val searchView = binding.appbar.findViewById<SearchView>(R.id.search_bar)
+        searchView = binding.appbar.findViewById(R.id.search_bar)
 
         searchView.isSubmitButtonEnabled = true
-        searchView.queryHint = "search..."
+        searchView.queryHint = "search by name"
         searchView.setOnQueryTextListener(this)
     }
 
-
     override fun onQueryTextSubmit(query: String?): Boolean {
-//        Toast.makeText(this, "submit", Toast.LENGTH_LONG).show()
         if (query != null) searchQuery(query)
+        searchView.onActionViewCollapsed()
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-//        Toast.makeText(this, "typing", Toast.LENGTH_LONG).show()
         return false
     }
 
@@ -79,5 +74,4 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         // TODO: 9/28/21 get the first argument
         pokeViewModel.getImages(Queries(null, searchQuery))
     }
-
 }

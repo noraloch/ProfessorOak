@@ -22,15 +22,14 @@ class PokeCardAdapter(
     override fun getItemCount() = pokeCardList.size
 
     fun updateList(pokeCards: List<Data>) {
-        if (pokeCards.lastOrNull() != pokeCardList.lastOrNull()) {
-            val positionStart = pokeCardList.size
-            pokeCardList.addAll(pokeCards)
-            notifyItemRangeInserted(positionStart, pokeCards.size)
-        }
+        val positionStart = pokeCardList.size
+        pokeCardList.addAll(pokeCards)
+        notifyItemRangeInserted(positionStart, pokeCards.size)
     }
 
     fun clear() {
         val listSize = pokeCardList.size
+        pokeCardList.clear()
         notifyItemRangeRemoved(0, listSize)
     }
 

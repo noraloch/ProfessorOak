@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.model.Data
@@ -35,11 +34,10 @@ class CardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            pokeViewModel.getImages(Queries(null,null))
-        } else {
-            pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
-        }
+        if (pokeViewModel.queries == null)
+            pokeViewModel.getImages(Queries(null, null))
+        else pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
+
         setupObservers()
     }
 
@@ -57,10 +55,15 @@ class CardsFragment : Fragment() {
     }
 
     private fun loadCardImages(data: List<Data>) = with(binding.rvList) {
-        Log.d(TAG, "loadCardImages data: ${data[3]}")
-        if (adapter == null) adapter = pokeCardAdapter
-        pokeCardAdapter.clear()
-        pokeCardAdapter.updateList(data)
+        if (data.isEmpty()) {
+            val dialogBuilder = AlertDialog.Builder(requireActivity())
+            dialogBuilder.setMessage("Your search did not match any valid names! Try again")
+            dialogBuilder.show()
+        } else {
+            if (adapter == null) adapter = pokeCardAdapter
+            pokeCardAdapter.clear()
+            pokeCardAdapter.updateList(data)
+        }
     }
 
 
@@ -68,18 +71,8 @@ class CardsFragment : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireActivity())
         dialogBuilder.setMessage("ApiState.Failure: $errorMsg")
         dialogBuilder.show()
-        Log.d(TAG, "ApiState.Failure: $errorMsg")
     }
 
-
-    //    private fun initViews() = with(binding) {
-//
-//        rvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//
-//            }
-//        })
-//    }
 
     companion object {
         private const val TAG = "CardsFragment"
