@@ -7,19 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.datastore.dataStoreFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.model.Data
-import com.nl.professoroak.model.DataWrapper
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.util.ApiState
 import com.nl.professoroak.viewmodel.PokeViewModel
-import kotlinx.coroutines.launch
 
 class CardsFragment : Fragment() {
 
@@ -38,7 +34,12 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokeViewModel.getImages(Queries(null,"name:pic*"))
+
+        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            pokeViewModel.getImages(Queries(null,null))
+        } else {
+            pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
+        }
         setupObservers()
     }
 
