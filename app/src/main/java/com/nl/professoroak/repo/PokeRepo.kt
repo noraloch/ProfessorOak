@@ -12,7 +12,6 @@ object PokeRepo {
 
     fun getPokeCardsState(queries: Queries?) = flow {
         emit(ApiState.Loading)
-
         val state = pokeService.getPokeCards(queries?.asQueryMap).getApiState()
         emit(state)
     }
@@ -26,7 +25,6 @@ object PokeRepo {
 
     private val Queries.asQueryMap: Map<String, Any>
         get() = listOfNotNull(
-            nationalPokedexNumbers?.let { "nationalPokedexNumbers" to it },
             q?.let {"q" to it}
         ).toMap()
 

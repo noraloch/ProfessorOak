@@ -2,24 +2,18 @@ package com.nl.professoroak.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.datastore.dataStoreFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.model.Data
-import com.nl.professoroak.model.DataWrapper
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.util.ApiState
 import com.nl.professoroak.viewmodel.PokeViewModel
-import kotlinx.coroutines.launch
 
 class CardsFragment : Fragment() {
 
@@ -38,7 +32,11 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokeViewModel.getImages(Queries("[1 TO 151]","name:char*"))
+
+        if (pokeViewModel.queries == null)
+            pokeViewModel.getImages(Queries(null))
+        else pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
+
         setupObservers()
     }
 
@@ -56,10 +54,15 @@ class CardsFragment : Fragment() {
     }
 
     private fun loadCardImages(data: List<Data>) = with(binding.rvList) {
-        Log.d(TAG, "loadCardImages data: ${data[3]}")
-        if (adapter == null) adapter = pokeCardAdapter
-        pokeCardAdapter.clear()
-        pokeCardAdapter.updateList(data)
+        if (data.isEmpty()) {
+            val dialogBuilder = AlertDialog.Builder(requireActivity())
+            dialogBuilder.setMessage("Your search did not match any of our valid names! Try again!")
+            dialogBuilder.show()
+        } else {
+            if (adapter == null) adapter = pokeCardAdapter
+            pokeCardAdapter.clear()
+            pokeCardAdapter.updateList(data)
+        }
     }
 
 
@@ -67,18 +70,8 @@ class CardsFragment : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireActivity())
         dialogBuilder.setMessage("ApiState.Failure: $errorMsg")
         dialogBuilder.show()
-        Log.d(TAG, "ApiState.Failure: $errorMsg")
     }
 
-
-    //    private fun initViews() = with(binding) {
-//
-//        rvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//
-//            }
-//        })
-//    }
 
     companion object {
         private const val TAG = "CardsFragment"
