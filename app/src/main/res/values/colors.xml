@@ -42,6 +42,7 @@
 
     <!--Color palette-->
 
+    <color name="yellow">#A3C5C4B5</color>
     <color name="purple_200">#bb86fc</color> <!--Color primary (dark)-->
     <color name="purple_500">#6200ee</color> <!--Color primary (light)-->
     <color name="purple_600">#4b01d0</color> <!--Color primary variant (dark)-->

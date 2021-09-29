@@ -17,12 +17,17 @@
         app:showAsAction="never"
         android:title="@string/my_collection" />
 
-
     <item
         android:id="@+id/og_only"
         android:contentDescription="@string/content_description_more"
         android:enabled="true"
         app:showAsAction="never"
         android:title="@string/original_151_only" />
+    <item
+        android:id="@+id/SHOW_ALL"
+        android:contentDescription="@string/show_all"
+        android:enabled="true"
+        app:showAsAction="never"
+        android:title="@string/show_all" />
 
 </menu>

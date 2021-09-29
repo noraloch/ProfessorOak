@@ -2,7 +2,6 @@ package com.nl.professoroak.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class CardsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (pokeViewModel.queries == null)
-            pokeViewModel.getImages(Queries(null, null))
+            pokeViewModel.getImages(Queries(null))
         else pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
 
         setupObservers()
@@ -57,7 +56,7 @@ class CardsFragment : Fragment() {
     private fun loadCardImages(data: List<Data>) = with(binding.rvList) {
         if (data.isEmpty()) {
             val dialogBuilder = AlertDialog.Builder(requireActivity())
-            dialogBuilder.setMessage("Your search did not match any valid names! Try again")
+            dialogBuilder.setMessage("Your search did not match any of our valid names! Try again!")
             dialogBuilder.show()
         } else {
             if (adapter == null) adapter = pokeCardAdapter

@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white_50">
 
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="0dp">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_pokeCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="15dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.9" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="end"
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/yellow"
             android:contentDescription="@string/add_to_collection"
-            app:srcCompat="@drawable/ic_add" />
+            android:outlineSpotShadowColor="@color/white_50"
+            app:borderWidth="0dp"
+            app:srcCompat="@drawable/ic_add"
+            android:layout_marginRight="7dp"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
