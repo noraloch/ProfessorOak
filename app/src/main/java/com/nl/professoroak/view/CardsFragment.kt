@@ -2,18 +2,25 @@ package com.nl.professoroak.view
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.model.Data
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.util.ApiState
+import com.nl.professoroak.util.PreferenceKey
 import com.nl.professoroak.viewmodel.PokeViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 
 class CardsFragment : Fragment() {
 
@@ -32,11 +39,20 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (pokeViewModel.queries == null)
-            pokeViewModel.getImages(Queries(null))
-        else pokeViewModel.queries?.let { pokeViewModel.getImages(it) }
-
+        // first we if we are not just getting a brand new call
+        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launch {
+            view.context.dataStore.data.map { preferences ->
+                if (preferences[PreferenceKey.Q] == null) pokeViewModel.getImages(Queries(null))
+                preferences[PreferenceKey.Q]?.let {
+                    Log.d(TAG, "onViewCreated pref string: $it ")
+                    Queries(
+                        q = preferences[PreferenceKey.Q]
+                    )
+                }
+            }.collect {
+                pokeViewModel.updateQueries(it)
+            }
+        }
         setupObservers()
     }
 
