@@ -23,7 +23,6 @@ import com.nl.professoroak.util.PreferenceKey
 import com.nl.professoroak.viewmodel.PokeViewModel
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val TAG = "Main Activity"
@@ -37,8 +36,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "savedInstanceState: $savedInstanceState")
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -57,7 +54,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     true
                 }
                 R.id.SHOW_ALL -> {
-                    pokeViewModel.getImages(Queries(null))
+                    lifecycleScope.launchWhenResumed {
+                        dataStore.edit {
+                            it.clear()
+                        }
+                    }
+                    pokeViewModel.getImages(pokeViewModel.queries)
                     true
                 }
                 else -> false
@@ -91,11 +93,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun filterOgOnly() {
-        pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
         lifecycleScope.launchWhenResumed {
             applicationContext.dataStore.edit { settings ->
                 settings[PreferenceKey.Q] = "nationalPokedexNumbers:[1 TO 151]"
             }
         }
+        pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
     }
 }
