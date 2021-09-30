@@ -44,7 +44,6 @@ class CardsFragment : Fragment() {
         if (pokeViewModel.queries == Queries(null)) viewLifecycleOwner.lifecycleScope.launch {
             view.context.dataStore.data.map { preferences ->
                 preferences[PreferenceKey.Q]?.let {
-                    Log.d(TAG, "onViewCreated pref string: $it ")
                     Queries(
                         q = preferences[PreferenceKey.Q]
                     )

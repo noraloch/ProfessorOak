@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
                 R.id.og_only -> {
                     filterOgOnly()
+                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 R.id.SHOW_ALL -> {
@@ -58,8 +59,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                         dataStore.edit {
                             it.clear()
                         }
+                        pokeViewModel.getImages(pokeViewModel.queries)
                     }
-                    pokeViewModel.getImages(pokeViewModel.queries)
+                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 else -> false
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) searchQuery(query)
+        navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
         searchView.onActionViewCollapsed()
         return true
     }
@@ -88,8 +91,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             applicationContext.dataStore.edit { settings ->
                 settings[PreferenceKey.Q] = searchQuery
             }
+            pokeViewModel.getImages(Queries(searchQuery))
         }
-        pokeViewModel.getImages(Queries(searchQuery))
+
     }
 
     private fun filterOgOnly() {
@@ -97,7 +101,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             applicationContext.dataStore.edit { settings ->
                 settings[PreferenceKey.Q] = "nationalPokedexNumbers:[1 TO 151]"
             }
+            pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
         }
-        pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
     }
 }
