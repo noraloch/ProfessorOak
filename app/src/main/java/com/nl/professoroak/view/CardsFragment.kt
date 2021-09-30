@@ -39,10 +39,10 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // first we if we are not just getting a brand new call
-        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launch {
+        if (pokeViewModel.queries == Queries(null)) viewLifecycleOwner.lifecycleScope.launch {
             view.context.dataStore.data.map { preferences ->
-                if (preferences[PreferenceKey.Q] == null) pokeViewModel.getImages(Queries(null))
                 preferences[PreferenceKey.Q]?.let {
                     Log.d(TAG, "onViewCreated pref string: $it ")
                     Queries(
@@ -50,7 +50,7 @@ class CardsFragment : Fragment() {
                     )
                 }
             }.collect {
-                pokeViewModel.updateQueries(it)
+                pokeViewModel.getImages(Queries(it?.q))
             }
         }
         setupObservers()

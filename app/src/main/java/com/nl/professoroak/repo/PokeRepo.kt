@@ -13,23 +13,22 @@ object PokeRepo {
 
     fun getPokeCardsState(queries: Queries?) = flow {
         emit(ApiState.Loading)
+        Log.d(TAG, "getPokeCardsState 66: $queries")
         val state = pokeService.getPokeCards(queries?.asQueryMap).getApiState()
+        Log.d(TAG, "getPokeCardsState 2: $state")
         emit(state)
     }
 
-    private fun <T> Response<T>.getApiState(): ApiState<T> {
+    private fun <T>  Response<T>.getApiState(): ApiState<T> {
         return if (isSuccessful) {
-            if (body() == null) ApiState.EndOfPage
+            if (body()== null) ApiState.EndOfPage
             else ApiState.Success(body()!!)
         } else ApiState.Failure("Error fetching data.")
     }
 
     private val Queries.asQueryMap: Map<String, Any>
-        get() {
-            Log.e(TAG, "Qwas $q: ")
-            return listOfNotNull(
-                q?.let { "q" to it }
-            ).toMap()
-        }
+        get() = listOfNotNull(
+            q?.let {"q" to it}
+        ).toMap()
 
 }
