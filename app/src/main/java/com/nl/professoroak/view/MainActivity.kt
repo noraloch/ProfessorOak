@@ -1,28 +1,20 @@
 package com.nl.professoroak.view
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.core.Preferences
 import androidx.appcompat.widget.SearchView
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nl.professoroak.NavGraphDirections
 import com.nl.professoroak.R
 import com.nl.professoroak.databinding.ActivityMainBinding
-import com.nl.professoroak.model.request.Queries
-import com.nl.professoroak.util.PreferenceKey
+import com.nl.professoroak.util.UserPrefManager
 import com.nl.professoroak.viewmodel.PokeViewModel
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val TAG = "Main Activity"
@@ -35,6 +27,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,15 +44,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
                 R.id.og_only -> {
                     filterOgOnly()
+                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 R.id.SHOW_ALL -> {
                     lifecycleScope.launchWhenResumed {
-                        dataStore.edit {
-                            it.clear()
-                        }
+                        UserPrefManager.getInstance(applicationContext).clearQuery()
                     }
-                    pokeViewModel.getImages(pokeViewModel.queries)
+                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 else -> false
@@ -74,6 +66,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) searchQuery(query)
+        navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
         searchView.onActionViewCollapsed()
         return true
     }
@@ -85,19 +78,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun searchQuery(query: String) {
         val searchQuery = "name:$query*"
         lifecycleScope.launchWhenResumed {
-            applicationContext.dataStore.edit { settings ->
-                settings[PreferenceKey.Q] = searchQuery
-            }
+            UserPrefManager.getInstance(applicationContext).saveQuery(searchQuery)
         }
-        pokeViewModel.getImages(Queries(searchQuery))
     }
 
     private fun filterOgOnly() {
         lifecycleScope.launchWhenResumed {
-            applicationContext.dataStore.edit { settings ->
-                settings[PreferenceKey.Q] = "nationalPokedexNumbers:[1 TO 151]"
-            }
+            UserPrefManager.getInstance(applicationContext).saveQuery("nationalPokedexNumbers:[1 TO 151]")
         }
-        pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
     }
 }

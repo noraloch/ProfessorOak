@@ -1,6 +1,5 @@
 package com.nl.professoroak.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,10 +19,6 @@ class PokeViewModel() : ViewModel() {
 
     var queries: Queries? = Queries(null)
 
-    fun updateQueries(queries: Queries?) {
-        this.queries = queries
-//        getImages(this.queries)
-    }
 
     fun getImages(queries: Queries?) {
         viewModelScope.launch {
