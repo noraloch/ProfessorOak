@@ -10,16 +10,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.Preferences
 import androidx.appcompat.widget.SearchView
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.nl.professoroak.NavGraphDirections
 import com.nl.professoroak.R
 import com.nl.professoroak.databinding.ActivityMainBinding
 import com.nl.professoroak.model.request.Queries
+import com.nl.professoroak.util.PreferenceKey
 import com.nl.professoroak.viewmodel.PokeViewModel
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val TAG = "Main Activity"
@@ -78,9 +82,20 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun searchQuery(query: String) {
         val searchQuery = "name:$query*"
+        lifecycleScope.launchWhenResumed {
+            applicationContext.dataStore.edit { settings ->
+                settings[PreferenceKey.Q] = searchQuery
+            }
+        }
         pokeViewModel.getImages(Queries(searchQuery))
     }
+
     private fun filterOgOnly() {
         pokeViewModel.getImages(Queries("nationalPokedexNumbers:[1 TO 151]"))
+        lifecycleScope.launchWhenResumed {
+            applicationContext.dataStore.edit { settings ->
+                settings[PreferenceKey.Q] = "nationalPokedexNumbers:[1 TO 151]"
+            }
+        }
     }
 }

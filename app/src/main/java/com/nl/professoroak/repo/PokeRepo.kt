@@ -1,5 +1,6 @@
 package com.nl.professoroak.repo
 
+import android.util.Log
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.repo.remote.RetrofitInstance
 import com.nl.professoroak.util.ApiState
@@ -16,16 +17,19 @@ object PokeRepo {
         emit(state)
     }
 
-    private fun <T>  Response<T>.getApiState(): ApiState<T> {
+    private fun <T> Response<T>.getApiState(): ApiState<T> {
         return if (isSuccessful) {
-            if (body()== null) ApiState.EndOfPage
+            if (body() == null) ApiState.EndOfPage
             else ApiState.Success(body()!!)
         } else ApiState.Failure("Error fetching data.")
     }
 
     private val Queries.asQueryMap: Map<String, Any>
-        get() = listOfNotNull(
-            q?.let {"q" to it}
-        ).toMap()
+        get() {
+            Log.e(TAG, "Qwas $q: ")
+            return listOfNotNull(
+                q?.let { "q" to it }
+            ).toMap()
+        }
 
 }
