@@ -1,28 +1,13 @@
 package com.nl.professoroak.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.view.menu.ActionMenuItemView
-import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.nl.professoroak.R
-import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.databinding.ItemPokeCardBinding
 import com.nl.professoroak.model.CardEntity
 import com.nl.professoroak.model.Data
-import com.nl.professoroak.repo.local.CollectionDatabase
 import com.nl.professoroak.util.loadWithGlide
 import com.nl.professoroak.view.CardsFragment
-import com.nl.professoroak.viewmodel.PokeViewModel
-import kotlinx.coroutines.coroutineScope
 
 class PokeCardAdapter(
     val pokeCardList: MutableList<Data> = mutableListOf()

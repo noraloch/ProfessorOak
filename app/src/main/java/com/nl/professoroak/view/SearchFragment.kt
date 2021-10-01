@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.nl.professoroak.R
-import com.nl.professoroak.databinding.FragmentMyCollectionBinding
 import com.nl.professoroak.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment(R.layout.fragment_search) {

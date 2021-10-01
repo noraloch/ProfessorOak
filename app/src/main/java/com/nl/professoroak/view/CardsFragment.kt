@@ -1,19 +1,15 @@
 package com.nl.professoroak.view
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.nl.professoroak.R
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
 import com.nl.professoroak.model.CardEntity
@@ -21,11 +17,9 @@ import com.nl.professoroak.model.Data
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.repo.local.CollectionDatabase
 import com.nl.professoroak.util.ApiState
-import com.nl.professoroak.util.PreferenceKey
 import com.nl.professoroak.util.UserPrefManager
 import com.nl.professoroak.viewmodel.PokeViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -36,9 +30,6 @@ class CardsFragment : Fragment() {
     private val pokeViewModel by activityViewModels<PokeViewModel>()
     private val pokeCardAdapter by lazy { PokeCardAdapter() }
     private lateinit var database: CollectionDatabase
-    override fun getContext(): Context? {
-        return super.getContext()
-    }
 
 
     override fun onCreateView(
@@ -58,7 +49,6 @@ class CardsFragment : Fragment() {
                 pokeViewModel.getImages(Queries(it?.q))
             }
         }
-//        initView()
         setupObservers()
     }
 
@@ -66,7 +56,6 @@ class CardsFragment : Fragment() {
         context?.let { CollectionDatabase.getInstance(it).collectionDao().insertCard(cardEntity) }
         Log.d(TAG, "addToCollection: $cardEntity")
     }
-
 
 
     override fun onDestroyView() {
