@@ -7,19 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.datastore.dataStoreFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.nl.professoroak.adapter.PokeCardAdapter
 import com.nl.professoroak.databinding.FragmentCardsBinding
+import com.nl.professoroak.model.CardEntity
 import com.nl.professoroak.model.Data
-import com.nl.professoroak.model.DataWrapper
 import com.nl.professoroak.model.request.Queries
+import com.nl.professoroak.repo.local.CollectionDatabase
 import com.nl.professoroak.util.ApiState
+import com.nl.professoroak.util.UserPrefManager
 import com.nl.professoroak.viewmodel.PokeViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.math.log
+
 
 class CardsFragment : Fragment() {
 
@@ -27,6 +30,8 @@ class CardsFragment : Fragment() {
     private val binding get() = _binding!!
     private val pokeViewModel by activityViewModels<PokeViewModel>()
     private val pokeCardAdapter by lazy { PokeCardAdapter() }
+    private lateinit var database: CollectionDatabase
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +43,22 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokeViewModel.getImages(Queries("[1 TO 151]","name:char*"))
+
+        // first we if we are not just getting a brand new call
+        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launch {
+                UserPrefManager.getInstance(view.context).queries.collect {
+                pokeViewModel.getImages(Queries(it?.q))
+                    Log.d(TAG, "onViewCreated 1: ${Queries(it?.q)}")
+            }
+        }
         setupObservers()
     }
+
+    fun addToCollection(cardEntity: CardEntity) {
+        context?.let { CollectionDatabase.getInstance(it).collectionDao().insertCard(cardEntity) }
+        Log.d(TAG, "addToCollection: $cardEntity")
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -56,10 +74,15 @@ class CardsFragment : Fragment() {
     }
 
     private fun loadCardImages(data: List<Data>) = with(binding.rvList) {
-        Log.d(TAG, "loadCardImages data: ${data[3]}")
-        if (adapter == null) adapter = pokeCardAdapter
-        pokeCardAdapter.clear()
-        pokeCardAdapter.updateList(data)
+        if (data.isEmpty()) {
+            val dialogBuilder = AlertDialog.Builder(requireActivity())
+            dialogBuilder.setMessage("Your search did not match any of our valid names! Try again!")
+            dialogBuilder.show()
+        } else {
+            if (adapter == null) adapter = pokeCardAdapter
+            pokeCardAdapter.clear()
+            pokeCardAdapter.updateList(data)
+        }
     }
 
 
@@ -67,18 +90,8 @@ class CardsFragment : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireActivity())
         dialogBuilder.setMessage("ApiState.Failure: $errorMsg")
         dialogBuilder.show()
-        Log.d(TAG, "ApiState.Failure: $errorMsg")
     }
 
-
-    //    private fun initViews() = with(binding) {
-//
-//        rvList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//
-//            }
-//        })
-//    }
 
     companion object {
         private const val TAG = "CardsFragment"

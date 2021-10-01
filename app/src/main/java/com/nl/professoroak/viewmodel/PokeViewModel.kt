@@ -1,8 +1,5 @@
 package com.nl.professoroak.viewmodel
 
-import android.app.Application
-import android.nfc.Tag
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,16 +19,11 @@ class PokeViewModel() : ViewModel() {
 
     var queries: Queries? = null
 
-    fun getImages(){
-        getImages(null)
-    }
 
     fun getImages(queries: Queries?) {
         viewModelScope.launch {
             PokeRepo.getPokeCardsState(queries).collect { pokeCardsState ->
                 _pokeCardsState.postValue(pokeCardsState)
-                Log.d(TAG, "getImages pokeCardsState: ${pokeCardsState}")
-                Log.d(TAG, "getImages _pokeCardsState: $_pokeCardsState")
             }
         }
     }

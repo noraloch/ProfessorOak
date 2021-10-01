@@ -1,5 +1,6 @@
 package com.nl.professoroak.repo
 
+import android.util.Log
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.repo.remote.RetrofitInstance
 import com.nl.professoroak.util.ApiState
@@ -12,8 +13,9 @@ object PokeRepo {
 
     fun getPokeCardsState(queries: Queries?) = flow {
         emit(ApiState.Loading)
-
+        Log.d(TAG, "getPokeCardsState 66: $queries")
         val state = pokeService.getPokeCards(queries?.asQueryMap).getApiState()
+        Log.d(TAG, "getPokeCardsState 2: $state")
         emit(state)
     }
 
@@ -26,7 +28,6 @@ object PokeRepo {
 
     private val Queries.asQueryMap: Map<String, Any>
         get() = listOfNotNull(
-            nationalPokedexNumbers?.let { "nationalPokedexNumbers" to it },
             q?.let {"q" to it}
         ).toMap()
 
