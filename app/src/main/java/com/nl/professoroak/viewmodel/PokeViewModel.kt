@@ -1,12 +1,16 @@
 package com.nl.professoroak.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nl.professoroak.model.CardEntity
 import com.nl.professoroak.model.DataWrapper
 import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.repo.PokeRepo
+import com.nl.professoroak.repo.local.CollectionDatabase
 import com.nl.professoroak.util.ApiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
