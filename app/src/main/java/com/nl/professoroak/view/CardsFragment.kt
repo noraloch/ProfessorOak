@@ -22,6 +22,7 @@ import com.nl.professoroak.model.request.Queries
 import com.nl.professoroak.repo.local.CollectionDatabase
 import com.nl.professoroak.util.ApiState
 import com.nl.professoroak.util.PreferenceKey
+import com.nl.professoroak.util.UserPrefManager
 import com.nl.professoroak.viewmodel.PokeViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -53,13 +54,7 @@ class CardsFragment : Fragment() {
 
         // first we if we are not just getting a brand new call
         if (pokeViewModel.queries == Queries(null)) viewLifecycleOwner.lifecycleScope.launch {
-            view.context.dataStore.data.map { preferences ->
-                preferences[PreferenceKey.Q]?.let {
-                    Queries(
-                        q = preferences[PreferenceKey.Q]
-                    )
-                }
-            }.collect {
+                UserPrefManager.getInstance(view.context).queries.collect {
                 pokeViewModel.getImages(Queries(it?.q))
             }
         }

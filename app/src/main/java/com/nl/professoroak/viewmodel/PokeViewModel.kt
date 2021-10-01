@@ -24,7 +24,6 @@ class PokeViewModel() : ViewModel() {
     var queries: Queries? = Queries(null)
 
 
-
     fun getImages(queries: Queries?) {
         viewModelScope.launch {
             PokeRepo.getPokeCardsState(queries).collect { pokeCardsState ->
