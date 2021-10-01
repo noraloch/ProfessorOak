@@ -21,6 +21,7 @@ import com.nl.professoroak.util.UserPrefManager
 import com.nl.professoroak.viewmodel.PokeViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 class CardsFragment : Fragment() {
@@ -44,9 +45,10 @@ class CardsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // first we if we are not just getting a brand new call
-        if (pokeViewModel.queries == Queries(null)) viewLifecycleOwner.lifecycleScope.launch {
+        if (pokeViewModel.queries == null) viewLifecycleOwner.lifecycleScope.launch {
                 UserPrefManager.getInstance(view.context).queries.collect {
                 pokeViewModel.getImages(Queries(it?.q))
+                    Log.d(TAG, "onViewCreated 1: ${Queries(it?.q)}")
             }
         }
         setupObservers()

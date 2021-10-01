@@ -17,7 +17,7 @@ class PokeViewModel() : ViewModel() {
     val pokeCardsState: LiveData<ApiState<DataWrapper>>
         get() = _pokeCardsState
 
-    var queries: Queries? = Queries(null)
+    var queries: Queries? = null
 
 
     fun getImages(queries: Queries?) {

@@ -44,14 +44,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
                 R.id.og_only -> {
                     filterOgOnly()
-                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 R.id.SHOW_ALL -> {
                     lifecycleScope.launchWhenResumed {
                         UserPrefManager.getInstance(applicationContext).clearQuery()
+                        navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     }
-                    navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
                     true
                 }
                 else -> false
@@ -66,7 +65,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null) searchQuery(query)
-        navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
         searchView.onActionViewCollapsed()
         return true
     }
@@ -79,12 +77,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         val searchQuery = "name:$query*"
         lifecycleScope.launchWhenResumed {
             UserPrefManager.getInstance(applicationContext).saveQuery(searchQuery)
+            navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
         }
     }
 
     private fun filterOgOnly() {
         lifecycleScope.launchWhenResumed {
             UserPrefManager.getInstance(applicationContext).saveQuery("nationalPokedexNumbers:[1 TO 151]")
+            navHostFragment.navController.navigate(NavGraphDirections.actionGlobalCards())
         }
     }
 }
